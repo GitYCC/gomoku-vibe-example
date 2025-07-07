@@ -1,0 +1,34 @@
+@startuml context_diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Gomoku Game - System Context Diagram
+
+Person(player1, "Player 1", "玩家1 - 黑子先手")
+Person(player2, "Player 2", "玩家2 - 白子後手")
+
+System(gomoku_system, "Gomoku Game System", "五子棋遊戲系統\n提供15x15棋盤的本地對戰遊戲")
+
+System_Ext(web_browser, "Web Browser", "網頁瀏覽器\n渲染遊戲界面並處理用戶互動")
+
+Rel(player1, web_browser, "使用", "點擊棋盤落子")
+Rel(player2, web_browser, "使用", "點擊棋盤落子")
+Rel(web_browser, gomoku_system, "通信", "HTTP/JSON API\n遊戲狀態同步")
+
+note right of gomoku_system
+  **系統功能:**
+  • 15x15標準棋盤
+  • 輪流落子邏輯
+  • 勝負判斷算法
+  • 遊戲狀態管理
+  • RESTful API服務
+end note
+
+note left of web_browser
+  **前端功能:**
+  • HTML5 Canvas棋盤渲染
+  • 用戶點擊事件處理
+  • 遊戲狀態顯示
+  • 控制按鈕界面
+end note
+
+@enduml
