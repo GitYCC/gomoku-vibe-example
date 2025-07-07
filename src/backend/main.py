@@ -18,7 +18,7 @@ app.add_middleware(
 app.include_router(game_router)
 
 # Serve static files (frontend)
-app.mount("/", StaticFiles(directory="frontend", html=True), name="static")
+app.mount("/", StaticFiles(directory="src/frontend", html=True), name="static")
 
 @app.get("/health")
 async def health_check():

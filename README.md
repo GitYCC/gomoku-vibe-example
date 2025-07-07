@@ -24,13 +24,12 @@
 
 1. 安裝依賴:
 ```bash
-cd backend
-pip install -r requirements.txt
+pip install -r src/backend/requirements.txt
 ```
 
 2. 運行服務器:
 ```bash
-python main.py
+python3 -m src.backend.main
 ```
 
 服務器將在 `http://localhost:8000` 啟動。
@@ -91,16 +90,18 @@ python main.py
 ### 項目結構
 
 ```
-src/
-├── backend/
-│   ├── game_engine/     # 遊戲邏輯引擎
-│   ├── game_api/        # API 服務層
-│   ├── models/          # 數據模型
-│   └── main.py          # 應用入口
-└── frontend/
-    ├── js/              # JavaScript 組件
-    ├── css/             # 樣式文件
-    └── index.html       # 主頁面
+gomoku/
+├── src/
+│   ├── backend/
+│   │   ├── game_engine/     # 遊戲邏輯引擎
+│   │   ├── game_api/        # API 服務層
+│   │   ├── models/          # 數據模型
+│   │   └── main.py          # 應用入口
+│   └── frontend/
+│       ├── js/              # JavaScript 組件
+│       ├── css/             # 樣式文件
+│       └── index.html       # 主頁面
+└── README.md                # 專案說明文件
 ```
 
 ### 擴展功能
