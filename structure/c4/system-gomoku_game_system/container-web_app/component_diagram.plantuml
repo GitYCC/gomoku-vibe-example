@@ -1,0 +1,61 @@
+@startuml web_app_component_diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Web Application Container - Component Diagram
+
+Person(player, "Player", "遊戲玩家")
+
+Container_Boundary(web_app, "Web Application") {
+    Component(main_page, "Main Page", "HTML", "遊戲主頁面\n- 頁面結構定義\n- 棋盤區域容器\n- 遊戲資訊顯示區")
+    
+    Component(game_ui, "Game UI Controller", "JavaScript", "遊戲界面控制器\n- 用戶界面狀態管理\n- 遊戲資訊更新\n- 控制按鈕事件處理")
+    
+    Component(board_renderer, "Board Renderer", "HTML5 Canvas + JavaScript", "棋盤渲染器\n- 15x15棋盤繪製\n- 棋子視覺化\n- 落子動畫效果")
+    
+    Component(input_handler, "Input Handler", "JavaScript", "用戶輸入處理器\n- 滑鼠點擊事件捕獲\n- 座標轉換邏輯\n- 觸控事件支援")
+    
+    Component(api_client, "API Client", "JavaScript/Fetch API", "API客戶端\n- HTTP請求封裝\n- JSON數據處理\n- 錯誤處理機制")
+    
+    Component(game_state_manager, "Game State Manager", "JavaScript", "前端遊戲狀態管理\n- 本地狀態快取\n- 狀態同步邏輯\n- 資料驗證")
+    
+    Component(styles, "Styles", "CSS3", "樣式表\n- 響應式設計\n- 視覺主題\n- 動畫效果")
+}
+
+Container_Ext(game_api, "Game API Server", "Python/FastAPI", "後端API服務器")
+
+Rel(player, main_page, "訪問", "HTTP/HTTPS")
+Rel(main_page, game_ui, "載入", "DOM操作")
+Rel(main_page, styles, "套用", "CSS樣式")
+
+Rel(game_ui, board_renderer, "調用", "繪製棋盤")
+Rel(game_ui, input_handler, "註冊", "事件監聽")
+Rel(game_ui, game_state_manager, "更新", "狀態同步")
+
+Rel(input_handler, board_renderer, "獲取", "點擊座標")
+Rel(input_handler, api_client, "觸發", "API調用")
+
+Rel(api_client, game_state_manager, "更新", "遊戲狀態")
+Rel(api_client, game_api, "請求", "HTTP/JSON")
+
+Rel(game_state_manager, board_renderer, "通知", "重新繪製")
+Rel(game_state_manager, game_ui, "通知", "狀態更新")
+
+note right of board_renderer
+  **棋盤渲染功能:**
+  • 15x15網格線繪製
+  • 黑白棋子渲染
+  • 座標標示
+  • 最後落子高亮
+  • 獲勝路徑標記
+end note
+
+note left of api_client
+  **API調用功能:**
+  • POST /api/game/start
+  • GET /api/game/{game_id}
+  • POST /api/game/{game_id}/move
+  • POST /api/game/{game_id}/reset
+  • 錯誤處理和重試機制
+end note
+
+@enduml

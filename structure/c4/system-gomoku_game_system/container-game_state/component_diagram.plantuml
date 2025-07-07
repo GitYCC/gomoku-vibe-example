@@ -1,0 +1,70 @@
+@startuml game_state_component_diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Game State Store Container - Component Diagram
+
+Container_Ext(game_engine, "Game Logic Engine", "Python", "遊戲邏輯引擎")
+
+Container_Boundary(game_state, "Game State Store") {
+    Component(memory_store, "Memory Store", "Python/Dict", "內存存儲\n- 字典型資料結構\n- 快速讀寫存取\n- 會話級別持久化")
+    
+    Component(game_session_store, "Game Session Store", "Python", "遊戲會話存儲\n- 遊戲ID管理\n- 會話狀態存儲\n- 會話生命週期")
+    
+    Component(board_state_store, "Board State Store", "Python", "棋盤狀態存儲\n- 15x15棋盤數據\n- 落子歷史記錄\n- 棋盤快照管理")
+    
+    Component(player_state_store, "Player State Store", "Python", "玩家狀態存儲\n- 當前玩家資訊\n- 回合計數器\n- 玩家動作歷史")
+    
+    Component(game_metadata_store, "Game Metadata Store", "Python", "遊戲元數據存儲\n- 遊戲創建時間\n- 遊戲狀態標記\n- 統計數據")
+    
+    Component(cache_manager, "Cache Manager", "Python", "快取管理器\n- 數據快取策略\n- 過期數據清理\n- 記憶體使用優化")
+    
+    Component(data_serializer, "Data Serializer", "Python/JSON", "數據序列化器\n- 物件序列化\n- JSON格式轉換\n- 數據完整性驗證")
+}
+
+Rel(game_engine, memory_store, "存取", "讀寫操作")
+Rel(memory_store, game_session_store, "管理", "會話數據")
+Rel(memory_store, cache_manager, "優化", "快取策略")
+
+Rel(game_session_store, board_state_store, "包含", "棋盤狀態")
+Rel(game_session_store, player_state_store, "包含", "玩家狀態")
+Rel(game_session_store, game_metadata_store, "包含", "元數據")
+
+Rel(board_state_store, data_serializer, "序列化", "棋盤數據")
+Rel(player_state_store, data_serializer, "序列化", "玩家數據")
+Rel(game_metadata_store, data_serializer, "序列化", "元數據")
+
+Rel(cache_manager, game_session_store, "清理", "過期會話")
+
+note right of board_state_store
+  **棋盤狀態數據結構:**
+  • board: array[15][15]
+    - 0: 空位
+    - 1: 黑子
+    - 2: 白子
+  • move_history: 落子歷史
+  • last_move: 最後落子位置
+  • total_moves: 總落子數
+end note
+
+note left of player_state_store
+  **玩家狀態數據:**
+  • current_player: 當前玩家
+    - 1: 黑棋 (先手)
+    - 2: 白棋 (後手)
+  • turn_count: 回合數
+  • player_actions: 玩家動作記錄
+end note
+
+note bottom of game_metadata_store
+  **遊戲元數據:**
+  • game_id: 遊戲唯一識別碼
+  • game_status: 遊戲狀態
+    - "playing": 進行中
+    - "black_wins": 黑棋勝利
+    - "white_wins": 白棋勝利
+    - "draw": 平局
+  • created_at: 創建時間
+  • winner: 勝利者
+end note
+
+@enduml

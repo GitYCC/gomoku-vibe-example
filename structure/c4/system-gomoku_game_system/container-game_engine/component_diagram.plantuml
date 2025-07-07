@@ -1,0 +1,70 @@
+@startuml game_engine_component_diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Game Logic Engine Container - Component Diagram
+
+Container_Ext(game_api, "Game API Server", "Python/FastAPI", "API服務器")
+
+Container_Boundary(game_engine, "Game Logic Engine") {
+    Component(game_manager, "Game Manager", "Python", "遊戲管理器\n- 遊戲實例管理\n- 遊戲生命週期控制\n- 多遊戲會話協調")
+    
+    Component(board_manager, "Board Manager", "Python", "棋盤管理器\n- 15x15棋盤狀態\n- 落子位置管理\n- 棋盤數據結構")
+    
+    Component(move_validator, "Move Validator", "Python", "落子驗證器\n- 落子有效性檢查\n- 位置重複驗證\n- 邊界條件檢查")
+    
+    Component(win_checker, "Win Checker", "Python", "勝負判斷器\n- 五子連線檢測\n- 橫直斜向掃描\n- 獲勝路徑計算")
+    
+    Component(game_rules, "Game Rules", "Python", "遊戲規則引擎\n- 五子棋規則實現\n- 回合制邏輯\n- 遊戲結束條件")
+    
+    Component(player_manager, "Player Manager", "Python", "玩家管理器\n- 玩家狀態追蹤\n- 回合輪換邏輯\n- 玩家動作記錄")
+    
+    Component(game_state_calculator, "Game State Calculator", "Python", "遊戲狀態計算器\n- 狀態轉換邏輯\n- 遊戲進度計算\n- 統計數據生成")
+}
+
+Container_Ext(game_state, "Game State Store", "Memory Storage", "狀態存儲")
+
+Rel(game_api, game_manager, "調用", "遊戲操作")
+Rel(game_manager, board_manager, "管理", "棋盤狀態")
+Rel(game_manager, player_manager, "管理", "玩家狀態")
+Rel(game_manager, game_state_calculator, "計算", "遊戲狀態")
+
+Rel(board_manager, move_validator, "驗證", "落子操作")
+Rel(board_manager, win_checker, "檢查", "勝負狀態")
+Rel(board_manager, game_state, "讀寫", "棋盤數據")
+
+Rel(move_validator, game_rules, "應用", "規則檢查")
+Rel(win_checker, game_rules, "應用", "勝負規則")
+
+Rel(player_manager, game_rules, "應用", "回合規則")
+Rel(game_state_calculator, board_manager, "讀取", "棋盤狀態")
+Rel(game_state_calculator, player_manager, "讀取", "玩家狀態")
+
+note right of win_checker
+  **勝負判斷算法:**
+  • 橫向五子連線檢測
+  • 縱向五子連線檢測
+  • 左斜向五子連線檢測
+  • 右斜向五子連線檢測
+  • 獲勝路徑座標返回
+  • 和局判斷 (棋盤滿)
+end note
+
+note left of board_manager
+  **棋盤管理功能:**
+  • 15x15二維陣列維護
+  • 落子位置狀態更新
+  • 棋盤清空重置
+  • 棋盤狀態序列化
+  • 位置座標轉換
+end note
+
+note bottom of game_rules
+  **遊戲規則定義:**
+  • 黑棋先手規則
+  • 輪流落子規則
+  • 落子位置限制
+  • 遊戲結束條件
+  • 勝負判定標準
+end note
+
+@enduml

@@ -1,0 +1,67 @@
+@startuml game_api_component_diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Game API Server Container - Component Diagram
+
+Container_Ext(web_app, "Web Application", "HTML5/CSS3/JavaScript", "前端應用")
+
+Container_Boundary(game_api, "Game API Server") {
+    Component(fastapi_app, "FastAPI Application", "Python/FastAPI", "API應用程式\n- 路由定義\n- 中介軟體設定\n- CORS配置")
+    
+    Component(game_router, "Game Router", "Python/FastAPI Router", "遊戲路由器\n- 遊戲相關API端點\n- 請求驗證\n- 回應格式化")
+    
+    Component(game_controller, "Game Controller", "Python", "遊戲控制器\n- 業務邏輯協調\n- 請求參數驗證\n- 回應數據組裝")
+    
+    Component(game_service, "Game Service", "Python", "遊戲服務層\n- 遊戲會話管理\n- 狀態轉換邏輯\n- 業務規則執行")
+    
+    Component(validation_service, "Validation Service", "Python", "驗證服務\n- 輸入數據驗證\n- 遊戲規則檢查\n- 錯誤訊息生成")
+    
+    Component(response_models, "Response Models", "Python/Pydantic", "回應模型\n- 數據序列化\n- JSON格式定義\n- 型別驗證")
+    
+    Component(exception_handler, "Exception Handler", "Python", "例外處理器\n- 錯誤捕獲\n- 錯誤日誌記錄\n- 標準化錯誤回應")
+}
+
+Container_Ext(game_engine, "Game Logic Engine", "Python", "遊戲邏輯引擎")
+Container_Ext(game_state, "Game State Store", "Memory Storage", "遊戲狀態存儲")
+
+Rel(web_app, fastapi_app, "API請求", "HTTP/JSON")
+Rel(fastapi_app, game_router, "路由", "請求分發")
+Rel(fastapi_app, exception_handler, "處理", "例外捕獲")
+
+Rel(game_router, game_controller, "調用", "控制器方法")
+Rel(game_router, response_models, "序列化", "回應格式")
+
+Rel(game_controller, game_service, "調用", "業務邏輯")
+Rel(game_controller, validation_service, "驗證", "輸入數據")
+
+Rel(game_service, game_engine, "調用", "遊戲邏輯")
+Rel(game_service, game_state, "存取", "狀態數據")
+
+Rel(validation_service, exception_handler, "觸發", "驗證錯誤")
+
+note right of game_router
+  **API端點定義:**
+  • POST /api/game/start
+    - 建立新遊戲會話
+    - 初始化棋盤狀態
+  • GET /api/game/{game_id}
+    - 獲取遊戲狀態
+    - 返回棋盤數據
+  • POST /api/game/{game_id}/move
+    - 處理落子請求
+    - 驗證落子有效性
+  • POST /api/game/{game_id}/reset
+    - 重置遊戲狀態
+    - 清空棋盤
+end note
+
+note left of game_service
+  **服務層功能:**
+  • 遊戲會話生命週期管理
+  • 玩家回合輪換控制
+  • 遊戲狀態持久化
+  • 業務邏輯封裝
+  • 事務處理
+end note
+
+@enduml
