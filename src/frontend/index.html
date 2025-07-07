@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五子棋 - Gomoku</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>五子棋遊戲</h1>
+        </header>
+        
+        <main>
+            <div class="game-info">
+                <div class="status-panel">
+                    <div class="current-player">
+                        <span id="current-player-text">當前玩家: 黑子</span>
+                    </div>
+                    <div class="game-status">
+                        <span id="game-status-text">遊戲進行中</span>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button id="new-game-btn" class="btn btn-primary">新遊戲</button>
+                    <button id="reset-game-btn" class="btn btn-secondary" disabled>重新開始</button>
+                </div>
+            </div>
+            
+            <div class="game-board-container">
+                <canvas id="game-board" width="600" height="600"></canvas>
+            </div>
+            
+            <div class="game-instructions">
+                <h3>遊戲規則</h3>
+                <ul>
+                    <li>黑子先手，白子後手</li>
+                    <li>輪流在棋盤上放置棋子</li>
+                    <li>率先在橫、直、斜任意方向連成五子者獲勝</li>
+                    <li>點擊棋盤交叉點放置棋子</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+    
+    <script src="js/api-client.js"></script>
+    <script src="js/board-renderer.js"></script>
+    <script src="js/input-handler.js"></script>
+    <script src="js/game-state-manager.js"></script>
+    <script src="js/game-ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
