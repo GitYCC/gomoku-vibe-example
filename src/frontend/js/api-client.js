@@ -86,4 +86,44 @@ class ApiClient {
             throw error;
         }
     }
+
+    async getScoreboard() {
+        try {
+            const response = await fetch(`${this.baseURL}/scoreboard`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error getting scoreboard:', error);
+            throw error;
+        }
+    }
+
+    async resetScoreboard() {
+        try {
+            const response = await fetch(`${this.baseURL}/scoreboard/reset`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error resetting scoreboard:', error);
+            throw error;
+        }
+    }
 }

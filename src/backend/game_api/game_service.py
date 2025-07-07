@@ -1,10 +1,11 @@
 from typing import Optional
 from ..game_engine.game_manager import GameManager
-from ..models.game_models import GameState, MoveResponse, GameStartResponse
+from ..models.game_models import GameState, MoveResponse, GameStartResponse, GameStatus
 
 class GameService:
     def __init__(self):
         self.game_manager = GameManager()
+        self.scoreboard_service = None  # Will be injected from controller
     
     def start_new_game(self) -> GameStartResponse:
         """Start a new game"""
@@ -32,12 +33,22 @@ class GameService:
                 game_state=None
             )
         
+        # Store previous game status
+        previous_status = game.game_status
+        
         success = game.make_move(row, col)
         if success:
+            # Check if game ended and update scoreboard
+            current_state = game.get_game_state()
+            if (previous_status == GameStatus.PLAYING and 
+                current_state.game_status != GameStatus.PLAYING and
+                self.scoreboard_service is not None):
+                self.scoreboard_service.update_score(current_state.game_status)
+            
             return MoveResponse(
                 success=True,
                 message="Move successful",
-                game_state=game.get_game_state()
+                game_state=current_state
             )
         else:
             return MoveResponse(

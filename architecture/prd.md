@@ -25,6 +25,11 @@
 #### 2.1.2 遊戲模式
 - **本地對戰**: 兩人輪流在同一設備上對戰，遊戲狀態由後端管理
 
+#### 2.1.3 記分板功能
+- **得分追蹤**: 記錄雙方玩家的歷史勝負紀錄
+- **統計顯示**: 顯示總局數、勝局數、敗局數、勝率
+- **數據持久化**: 將得分數據持久化存儲
+
 ## 3. 技術架構
 
 ### 3.1 前端技術棧
@@ -63,6 +68,7 @@
 ### 4.1 頁面結構
 ```
 遊戲頁面
+├── 記分板區域 (雙方得分統計)
 ├── 棋盤區域 (15x15 網格)
 ├── 遊戲資訊 (當前玩家、遊戲狀態)
 └── 控制按鈕 (重新開始、悔棋)
@@ -81,9 +87,13 @@ POST /api/game/start      # 開始新遊戲
 GET  /api/game/{game_id}  # 獲取遊戲狀態
 POST /api/game/{game_id}/move  # 落子
 POST /api/game/{game_id}/reset # 重新開始
+GET  /api/scoreboard      # 獲取記分板數據
+POST /api/scoreboard/reset # 重置記分板
 ```
 
 ### 5.2 數據模型
+
+#### 5.2.1 遊戲狀態模型
 ```json
 {
   "game_id": "string",
@@ -91,6 +101,28 @@ POST /api/game/{game_id}/reset # 重新開始
   "current_player": "integer",  // 1: 黑子, 2: 白子
   "game_status": "string",  // "playing", "black_wins", "white_wins", "draw"
   "winner": "integer"  // null, 1, 2
+}
+```
+
+#### 5.2.2 記分板模型
+```json
+{
+  "player1": {
+    "name": "黑子",
+    "wins": "integer",
+    "losses": "integer",
+    "draws": "integer",
+    "total_games": "integer",
+    "win_rate": "float"
+  },
+  "player2": {
+    "name": "白子",
+    "wins": "integer", 
+    "losses": "integer",
+    "draws": "integer",
+    "total_games": "integer",
+    "win_rate": "float"
+  }
 }
 ```
 

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from backend.game_api.game_controller import router as game_router
+from .game_api.game_controller import router as game_router
 
 app = FastAPI(title="Gomoku Game API", version="1.0.0")
 

@@ -32,3 +32,18 @@ class MoveResponse(BaseModel):
 class GameStartResponse(BaseModel):
     game_id: str
     game_state: GameState
+
+class PlayerStats(BaseModel):
+    name: str
+    wins: int = 0
+    losses: int = 0
+    draws: int = 0
+    total_games: int = 0
+    win_rate: float = 0.0
+
+class ScoreboardData(BaseModel):
+    player1: PlayerStats
+    player2: PlayerStats
+
+class ScoreboardResponse(BaseModel):
+    scoreboard: ScoreboardData

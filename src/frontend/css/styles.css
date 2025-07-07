@@ -38,6 +38,28 @@ main {
     gap: 20px;
 }
 
+/* Game layout */
+.game-layout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.left-panel {
+    min-width: 300px;
+    flex-shrink: 0;
+}
+
+.center-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
 /* Game info panel */
 .game-info {
     background: white;
@@ -255,4 +277,181 @@ main {
 
 .error {
     color: #e74c3c;
+}
+
+/* Scoreboard styles */
+.scoreboard-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+}
+
+.scoreboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+.scoreboard-header h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.reset-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+    background-color: #c0392b;
+    transform: translateY(-1px);
+}
+
+.scoreboard-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.player-stats {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    border-left: 4px solid #3498db;
+}
+
+.player-stats:first-child {
+    border-left-color: #2c3e50;
+}
+
+.player-stats:last-child {
+    border-left-color: #95a5a6;
+}
+
+.player-info h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: white;
+    border-radius: 5px;
+    border: 1px solid #ecf0f1;
+}
+
+.stat-item.win-rate {
+    grid-column: 1 / -1;
+    background: #e8f5e8;
+    border-color: #27ae60;
+}
+
+.stat-label {
+    font-weight: 500;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.stat-value {
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.win-rate .stat-value {
+    color: #27ae60;
+    font-size: 1.2rem;
+}
+
+.vs-divider {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #7f8c8d;
+    margin: 10px 0;
+}
+
+/* Responsive design for scoreboard */
+@media (max-width: 768px) {
+    .game-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .left-panel {
+        min-width: auto;
+        width: 100%;
+        max-width: 500px;
+    }
+    
+    .center-panel {
+        width: 100%;
+    }
+    
+    .scoreboard-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .scoreboard-content {
+        flex-direction: row;
+        gap: 15px;
+    }
+    
+    .player-stats {
+        flex: 1;
+    }
+    
+    .vs-divider {
+        writing-mode: vertical-lr;
+        text-orientation: mixed;
+        margin: 0 5px;
+        align-self: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .scoreboard-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .vs-divider {
+        writing-mode: horizontal-tb;
+        text-orientation: mixed;
+        margin: 10px 0;
+        align-self: auto;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-item.win-rate {
+        grid-column: 1;
+    }
 }

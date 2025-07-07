@@ -4,13 +4,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const apiClient = new ApiClient();
     const boardRenderer = new BoardRenderer('game-board');
     const gameStateManager = new GameStateManager(apiClient);
+    const scoreboardUI = new ScoreboardUI();
     const gameUI = new GameUI(gameStateManager);
     const inputHandler = new InputHandler(boardRenderer, gameStateManager);
     
-    // Set up game state listener for board renderer
+    // Set up scoreboard
+    scoreboardUI.setApiClient(apiClient);
+    const scoreboardContainer = document.getElementById('scoreboard-container');
+    scoreboardContainer.appendChild(scoreboardUI.getElement());
+    
+    // Load initial scoreboard data
+    scoreboardUI.loadScoreboard();
+    
+    // Set up game state listener for board renderer and scoreboard
     gameStateManager.addListener((gameState) => {
         if (gameState && gameState.board) {
             boardRenderer.renderBoard(gameState.board);
+            
+            // Update scoreboard when game ends
+            if (gameState.game_status !== 'playing') {
+                setTimeout(() => {
+                    scoreboardUI.loadScoreboard();
+                }, 100); // Small delay to ensure backend has processed the score update
+            }
         }
     });
     

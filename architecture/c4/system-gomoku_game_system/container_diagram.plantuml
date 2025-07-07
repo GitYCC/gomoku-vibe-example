@@ -7,13 +7,13 @@ Person(player1, "Player 1", "玩家1 - 黑子先手")
 Person(player2, "Player 2", "玩家2 - 白子後手")
 
 System_Boundary(gomoku_system, "Gomoku Game System") {
-    Container(web_app, "Web Application", "HTML5/CSS3/JavaScript", "前端靜態網頁應用\n- HTML5 Canvas棋盤渲染\n- 用戶互動事件處理\n- Fetch API後端通信\n- 遊戲狀態視覺化")
+    Container(web_app, "Web Application", "HTML5/CSS3/JavaScript", "前端靜態網頁應用\n- HTML5 Canvas棋盤渲染\n- 用戶互動事件處理\n- Fetch API後端通信\n- 遊戲狀態視覺化\n- 記分板顯示")
     
-    Container(game_api, "Game API Server", "Python/FastAPI", "後端API服務器\n- RESTful API端點\n- 遊戲邏輯控制\n- 狀態管理服務\n- Uvicorn部署")
+    Container(game_api, "Game API Server", "Python/FastAPI", "後端API服務器\n- RESTful API端點\n- 遊戲邏輯控制\n- 狀態管理服務\n- 記分板API服務\n- Uvicorn部署")
     
     Container(game_engine, "Game Logic Engine", "Python", "核心遊戲邏輯引擎\n- 五子棋規則實現\n- 勝負判斷算法\n- 落子驗證邏輯\n- 遊戲狀態轉換")
     
-    ContainerDb(game_state, "Game State Store", "Memory Storage", "內存遊戲狀態存儲\n- 15x15棋盤狀態\n- 當前玩家回合\n- 遊戲進行狀態\n- 勝負結果")
+    ContainerDb(game_state, "Game State Store", "Memory Storage", "內存遊戲狀態存儲\n- 15x15棋盤狀態\n- 當前玩家回合\n- 遊戲進行狀態\n- 勝負結果\n- 記分板統計數據")
 }
 
 System_Ext(web_browser, "Web Browser", "網頁瀏覽器")
@@ -30,6 +30,7 @@ note right of web_app
   • HTML5 Canvas 15x15棋盤繪製
   • 用戶點擊事件捕獲和處理
   • 遊戲狀態實時更新顯示
+  • 記分板數據顯示和更新
   • 控制按鈕(重新開始、悔棋)
   • 響應式界面適配
 end note
@@ -40,6 +41,8 @@ note left of game_api
   • GET /api/game/{game_id} - 獲取遊戲狀態
   • POST /api/game/{game_id}/move - 落子操作
   • POST /api/game/{game_id}/reset - 重置遊戲
+  • GET /api/scoreboard - 獲取記分板
+  • POST /api/scoreboard/reset - 重置記分板
   • 錯誤處理和邊界情況
 end note
 
@@ -50,6 +53,7 @@ note bottom of game_engine
   • 管理黑白棋手回合輪換
   • 處理遊戲結束邏輯
   • 棋盤狀態管理
+  • 記分板統計更新
 end note
 
 @enduml

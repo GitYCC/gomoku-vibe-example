@@ -1,17 +1,41 @@
 from fastapi import APIRouter, HTTPException
-from ..models.game_models import GameState, MoveRequest, MoveResponse, GameStartResponse
+from ..models.game_models import GameState, MoveRequest, MoveResponse, GameStartResponse, ScoreboardResponse
 from .game_service import GameService
+from .scoreboard_service import ScoreboardService
 
 router = APIRouter(prefix="/api/game", tags=["game"])
 
-# Global game service instance
+# Global service instances
 game_service = GameService()
+scoreboard_service = ScoreboardService()
+
+# Inject scoreboard service into game service
+game_service.scoreboard_service = scoreboard_service
 
 @router.post("/start", response_model=GameStartResponse)
 async def start_game():
     """Start a new game"""
     try:
         return game_service.start_new_game()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Scoreboard endpoints - moved before {game_id} routes to prevent route conflicts
+@router.get("/scoreboard", response_model=ScoreboardResponse)
+async def get_scoreboard():
+    """Get the current scoreboard data"""
+    try:
+        scoreboard_data = scoreboard_service.get_scoreboard()
+        return ScoreboardResponse(scoreboard=scoreboard_data)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/scoreboard/reset")
+async def reset_scoreboard():
+    """Reset the scoreboard"""
+    try:
+        scoreboard_service.reset_scoreboard()
+        return {"message": "Scoreboard reset successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
